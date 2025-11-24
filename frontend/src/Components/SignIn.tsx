@@ -19,7 +19,7 @@ const SignIn: React.FC<SignInProps> = () => {
       const response = await axios.post(
         "http://localhost:8080/api/auth/login",
         {
-          username: username, // 🔥 Correct field expected by backend
+          username: username,
           password: password,
         },
         {
@@ -62,82 +62,62 @@ const SignIn: React.FC<SignInProps> = () => {
 
   return (
     <div
-      style={{
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #4e54c8, #8f94fb)",
-        backgroundSize: "cover",
-      }}
+      className="
+        h-screen w-screen flex justify-center items-center 
+        bg-gradient-to-br from-[#4e54c8] to-[#8f94fb]
+      "
     >
       <form
         onSubmit={handleSubmit}
-        style={{
-          background: "white",
-          padding: "2rem",
-          borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-          width: "350px",
-        }}
+        className="
+          bg-white p-8 rounded-xl shadow-lg w-[350px]
+        "
       >
-        <h2 style={{ marginBottom: "1.5rem", textAlign: "center", color: "black" }}>
+        <h2 className="mb-6 text-center text-black text-2xl font-semibold">
           Sign In
         </h2>
 
         {error && (
-          <div style={{ color: "red", marginBottom: "1rem", textAlign: "center" }}>
-            {error}
-          </div>
+          <div className="text-red-600 mb-4 text-center">{error}</div>
         )}
 
-        <div style={{ marginBottom: "1rem" }}>
-          <label style={{ color: "black" }}>Username</label> {/* 🔥 Changed */}
+        <div className="mb-4">
+          <label className="text-black">Username</label>
           <input
-            type="text" // 🔥 Changed from "email"
+            type="text"
             required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              marginTop: "0.3rem",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
+            className="
+              w-full p-2 mt-1 rounded-md border border-gray-300
+              focus:outline-none focus:ring-2 focus:ring-blue-400
+            "
           />
         </div>
 
-        <div style={{ marginBottom: "1rem" }}>
-          <label style={{ color: "black" }}>Password</label>
+        <div className="mb-4">
+          <label className="text-black">Password</label>
           <input
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              marginTop: "0.3rem",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
+            className="
+              w-full p-2 mt-1 rounded-md border border-gray-300
+              focus:outline-none focus:ring-2 focus:ring-blue-400
+            "
           />
         </div>
 
-        <div style={{ marginBottom: "1rem" }}>
-          <label style={{ color: "black" }}>User Role</label>
+        <div className="mb-4">
+          <label className="text-black">User Role</label>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              marginTop: "0.3rem",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
+            className="
+              w-full p-2 mt-1 rounded-md border border-gray-300
+              focus:outline-none focus:ring-2 focus:ring-blue-400
+            "
           >
             <option value="Admin">Admin</option>
             <option value="Teacher">Teacher</option>
@@ -147,16 +127,10 @@ const SignIn: React.FC<SignInProps> = () => {
 
         <button
           type="submit"
-          style={{
-            width: "100%",
-            padding: "0.7rem",
-            borderRadius: "6px",
-            border: "none",
-            background: "#646cff",
-            color: "white",
-            fontWeight: "bold",
-            cursor: "pointer",
-          }}
+          className="
+            w-full p-3 rounded-md bg-[#646cff] text-white font-bold 
+            hover:bg-[#4d56ff] transition cursor-pointer
+          "
         >
           Sign In
         </button>

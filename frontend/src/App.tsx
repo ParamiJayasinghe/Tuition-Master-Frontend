@@ -3,12 +3,14 @@ import SignIn from "./Components/SignIn";
 import AdminDashboard from "./Components/Pages/AdminDashboard";
 import TeacherDashboard from "./Components/Pages/TeacherDashboard";
 import StudentDashboard from "./Components/Pages/StudentDashboard";
+import AddTeacher from "./Components/Pages/AddTeacher";
 
 function App() {
   return (
     <Routes>
       <Route path="/signin" element={<SignIn />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/admin/add-teacher" element={<AddTeacher />} />
       <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
       <Route path="/student/dashboard" element={<StudentDashboard />} />
     </Routes>

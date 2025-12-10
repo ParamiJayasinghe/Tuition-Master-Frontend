@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AdminLayout from "../Layout/AdminLayout";
+import AdminLayout from "../../Layout/AdminLayout";
 import TeacherProfileModal from "./TeacherProfileModal";
 
 interface Teacher {

@@ -1,9 +1,11 @@
-import DashboardLayout from "../Layout/AdminLayout";
+import DashboardLayout from "../../Layout/AdminLayout";
 
 const AdminDashboard: React.FC = () => {
   return (
     <DashboardLayout>
-      <h2 className="text-2xl font-bold mb-6 w-screen text-black">Admin Dashboard</h2>
+      <h2 className="text-2xl font-bold mb-6 w-screen text-black">
+        Admin Dashboard
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="p-6 bg-white shadow rounded-xl">

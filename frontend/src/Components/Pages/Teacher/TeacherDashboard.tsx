@@ -1,4 +1,4 @@
-import DashboardLayout from "../Layout/TeacherLayout";
+import DashboardLayout from "../../Layout/TeacherLayout";
 
 const TeacherDashboard: React.FC = () => {
   return (

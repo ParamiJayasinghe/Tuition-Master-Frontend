@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AdminLayout from "../Layout/AdminLayout";
+import AdminLayout from "../../Layout/AdminLayout";
 
 interface TeacherDetails {
   fullName: string;

@@ -14,6 +14,12 @@ import ClassFee from "./Components/Pages/Teacher/ClassFee";
 import Performance from "./Components/Pages/Teacher/Performance";
 import QnA from "./Components/Pages/Teacher/QnA";
 import AuditLogs from "./Components/Pages/Teacher/AuditLogs";
+import StudentPerformance from "./Components/Pages/Student/StudentPerformance";
+import StudentAssignments from "./Components/Pages/Student/StudentAssignment";
+import StudentMaterials from "./Components/Pages/Student/StudentMaterial";
+import StudentQuestions from "./Components/Pages/Student/StudentQuestions";
+import StudentAttendance from "./Components/Pages/Student/StudentAttendance";
+import StudentFees from "./Components/Pages/Student/StudentFee";
 
 function App() {
   return (
@@ -34,6 +40,13 @@ function App() {
       <Route path="/teacher/performance" element={<Performance />} />
       <Route path="/teacher/qna" element={<QnA />} />
       <Route path="/teacher/audit-logs" element={<AuditLogs />} />
+      <Route path="/student/dashboard" element={<StudentDashboard />} />
+      <Route path="/student/performance" element={<StudentPerformance />} />
+      <Route path="/student/assignments" element={<StudentAssignments />} />
+      <Route path="/student/materials" element={<StudentMaterials />} />
+      <Route path="/student/questions" element={<StudentQuestions />} />
+      <Route path="/student/attendance" element={<StudentAttendance />} />
+      <Route path="/student/fees" element={<StudentFees />} />
     </Routes>
   );
 }

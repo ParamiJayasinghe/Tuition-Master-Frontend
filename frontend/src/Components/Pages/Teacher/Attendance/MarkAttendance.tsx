@@ -27,11 +27,25 @@ const MarkAttendance = () => {
     }
   };
 
-  const markStatus = async (id: number, status: "PRESENT" | "ABSENT") => {
+  const markStatus = async (
+    studentId: number,
+    studentName: string,
+    status: "PRESENT" | "ABSENT"
+  ) => {
     try {
+      const payload = [
+        {
+          studentId,
+          studentName,
+          date: filters.date,
+          subject: filters.subject,
+          status,
+        },
+      ];
+
       await authFetch("http://localhost:8080/api/attendance", {
         method: "POST",
-        body: JSON.stringify({ id, status }),
+        body: JSON.stringify(payload),
       });
 
       fetchAttendance();
@@ -69,13 +83,18 @@ const MarkAttendance = () => {
               <td className="p-2 border">{a.studentName}</td>
               <td className="p-2 border flex gap-2">
                 <button
-                  onClick={() => markStatus(a.studentId, "PRESENT")}
+                  onClick={() =>
+                    markStatus(a.studentId, a.studentName, "PRESENT")
+                  }
                   className="bg-green-600 text-white px-3 py-1 rounded"
                 >
                   Present
                 </button>
+
                 <button
-                  onClick={() => markStatus(a.studentId, "ABSENT")}
+                  onClick={() =>
+                    markStatus(a.studentId, a.studentName, "ABSENT")
+                  }
                   className="bg-red-600 text-white px-3 py-1 rounded"
                 >
                   Absent

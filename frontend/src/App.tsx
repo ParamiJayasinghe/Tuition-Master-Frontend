@@ -9,7 +9,9 @@ import AddStudent from "./Components/Pages/Teacher/AddStudent";
 import StudentProfiles from "./Components/Pages/Teacher/StudentProfile";
 import AddAssignment from "./Components/Pages/Teacher/AddAssignment";
 import ViewAssignments from "./Components/Pages/Teacher/ViewAssignment";
-import Attendance from "./Components/Pages/Teacher/Attendance";
+import AttendanceHome from "./Components/Pages/Teacher/Attendance/AttendanceHome";
+import MarkAttendance from "./Components/Pages/Teacher/Attendance/MarkAttendance"
+import ViewAttendance from "./Components/Pages/Teacher/Attendance/ViewAttendance";
 import ClassFee from "./Components/Pages/Teacher/ClassFee";
 import Performance from "./Components/Pages/Teacher/Performance";
 import QnA from "./Components/Pages/Teacher/QnA";
@@ -35,7 +37,9 @@ function App() {
       <Route path="/teacher/students" element={<StudentProfiles />} />
       <Route path="/teacher/assignments/add" element={<AddAssignment />} />
       <Route path="/teacher/assignments" element={<ViewAssignments />} />
-      <Route path="/teacher/attendance" element={<Attendance />} />
+      <Route path="/teacher/attendance" element={<AttendanceHome />} />
+      <Route path="/teacher/attendance/mark" element={<MarkAttendance />} />
+<Route path="/teacher/attendance/view" element={<ViewAttendance />} />
       <Route path="/teacher/class-fee" element={<ClassFee />} />
       <Route path="/teacher/performance" element={<Performance />} />
       <Route path="/teacher/qna" element={<QnA />} />

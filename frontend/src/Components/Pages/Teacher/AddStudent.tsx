@@ -10,6 +10,7 @@ const AddStudent = () => {
     fullName: "",
     studentId: "",
     contactNumber: "",
+    grade: "",
     subjects: "",
     dateOfBirth: "",
     address: "",
@@ -40,6 +41,7 @@ const AddStudent = () => {
         fullName: formData.fullName,
         studentId: formData.studentId,
         contactNumber: formData.contactNumber,
+        grade: formData.grade,
         subjects: formData.subjects,
         dateOfBirth: formData.dateOfBirth,
         address: formData.address,
@@ -71,6 +73,7 @@ const AddStudent = () => {
         fullName: "",
         studentId: "",
         contactNumber: "",
+        grade: "",
         subjects: "",
         dateOfBirth: "",
         address: "",
@@ -151,7 +154,7 @@ const AddStudent = () => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           <input
             type="text"
             name="contactNumber"
@@ -159,6 +162,15 @@ const AddStudent = () => {
             value={formData.contactNumber}
             onChange={handleChange}
             required
+            className="border p-2 rounded"
+          />
+
+          <input
+            type="text"
+            name="grade"
+            placeholder="Grade"
+            value={formData.grade}
+            onChange={handleChange}
             className="border p-2 rounded"
           />
 

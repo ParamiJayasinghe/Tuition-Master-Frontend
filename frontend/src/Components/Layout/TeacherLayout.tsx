@@ -1,124 +1,145 @@
-import React from "react";
+import React, { useState } from "react";
 
 const TeacherLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [studentsOpen, setStudentsOpen] = useState(false);
+  const [assignmentsOpen, setAssignmentsOpen] = useState(false);
+
+  // Helper for active link styling (mock logic)
+  const getLinkClasses = (path: string) => {
+    const isActive = false; 
+    return `block p-3 rounded-lg transition-all duration-200 flex items-center gap-3 ${
+      isActive 
+        ? "bg-primary/10 text-primary font-medium" 
+        : "text-slate-400 hover:bg-slate-800 hover:text-white"
+    }`;
+  };
+
+  const getSubLinkClasses = (path: string) => {
+    return "block py-2 pl-4 text-sm text-slate-400 hover:text-primary transition-colors";
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-background font-sans text-slate-800">
       
-      {/* Teacher Sidebar */}
-      <aside className="w-64 bg-white shadow-md">
-        <div className="p-4 font-bold text-xl border-b">
-          Teacher Panel
+      {/* Sidebar */}
+      <aside className="w-64 bg-secondary flex flex-col shadow-xl z-20 transition-all duration-300">
+        {/* Logo */}
+        <div className="h-16 flex items-center px-6 border-b border-slate-700/50">
+           <div className="text-white font-bold text-xl tracking-tight flex items-center gap-2">
+            <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">TM</span>
+            Teacher Panel
+           </div>
         </div>
 
-        <nav className="p-4 space-y-4 text-sm">
-          <a
-            href="/teacher/dashboard"
-            className="block p-2 rounded hover:bg-gray-200 font-medium"
-          >
-            Dashboard
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+          
+          <a href="/teacher/dashboard" className={getLinkClasses("/teacher/dashboard")}>
+            <span>Dashboard</span>
           </a>
 
-          {/* Students */}
+          {/* Students Accordion */}
           <div>
-            <p className="text-gray-500 uppercase text-xs mb-1">Students</p>
-            <ul className="space-y-1 ml-2">
-              <li>
-                <a
-                  href="/teacher/students/add"
-                  className="block p-2 rounded hover:bg-gray-200"
-                >
-                  Add Students
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/teacher/students"
-                  className="block p-2 rounded hover:bg-gray-200"
-                >
-                  Student Profiles
-                </a>
-              </li>
-            </ul>
+            <button
+              onClick={() => setStudentsOpen(!studentsOpen)}
+              className={`w-full flex justify-between items-center p-3 rounded-lg transition-colors duration-200 text-slate-400 hover:bg-slate-800 hover:text-white ${studentsOpen ? 'text-white bg-slate-800' : ''}`}
+            >
+              <div className="flex items-center gap-3">
+                <span>Students</span>
+              </div>
+              <span className={`transform transition-transform duration-200 ${studentsOpen ? "rotate-180" : ""}`}>
+                ▼
+              </span>
+            </button>
+
+            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${studentsOpen ? 'max-h-40 opacity-100 mt-1' : 'max-h-0 opacity-0'}`}>
+              <ul className="pl-4 space-y-1 border-l-2 border-slate-700 ml-4">
+                <li><a href="/teacher/students/add" className={getSubLinkClasses("/teacher/students/add")}>Add Students</a></li>
+                <li><a href="/teacher/students" className={getSubLinkClasses("/teacher/students")}>Student Profiles</a></li>
+              </ul>
+            </div>
           </div>
 
-          {/* Assignments */}
+          {/* Assignments Accordion */}
           <div>
-            <p className="text-gray-500 uppercase text-xs mb-1">Assignments</p>
-            <ul className="space-y-1 ml-2">
-              <li>
-                <a
-                  href="/teacher/assignments/add"
-                  className="block p-2 rounded hover:bg-gray-200"
-                >
-                  Add Assignment
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/teacher/assignments"
-                  className="block p-2 rounded hover:bg-gray-200"
-                >
-                  View Assignments
-                </a>
-              </li>
-            </ul>
+            <button
+              onClick={() => setAssignmentsOpen(!assignmentsOpen)}
+              className={`w-full flex justify-between items-center p-3 rounded-lg transition-colors duration-200 text-slate-400 hover:bg-slate-800 hover:text-white ${assignmentsOpen ? 'text-white bg-slate-800' : ''}`}
+            >
+              <div className="flex items-center gap-3">
+                <span>Assignments</span>
+              </div>
+              <span className={`transform transition-transform duration-200 ${assignmentsOpen ? "rotate-180" : ""}`}>
+                ▼
+              </span>
+            </button>
+
+            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${assignmentsOpen ? 'max-h-40 opacity-100 mt-1' : 'max-h-0 opacity-0'}`}>
+              <ul className="pl-4 space-y-1 border-l-2 border-slate-700 ml-4">
+                <li><a href="/teacher/assignments/add" className={getSubLinkClasses("/teacher/assignments/add")}>Add Assignment</a></li>
+                <li><a href="/teacher/assignments" className={getSubLinkClasses("/teacher/assignments")}>View Assignments</a></li>
+              </ul>
+            </div>
           </div>
 
-          {/* Attendance */}
-          <a
-            href="/teacher/attendance"
-            className="block p-2 rounded hover:bg-gray-200"
-          >
-            Attendance
+          <a href="/teacher/attendance" className={getLinkClasses("/teacher/attendance")}>
+            <span>Attendance</span>
           </a>
 
-          {/* Class Fee */}
-          <a
-            href="/teacher/class-fee"
-            className="block p-2 rounded hover:bg-gray-200"
-          >
-            Class Fee
+          <a href="/teacher/class-fee" className={getLinkClasses("/teacher/class-fee")}>
+            <span>Class Fee</span>
           </a>
 
-          {/* Performance */}
-          <a
-            href="/teacher/performance"
-            className="block p-2 rounded hover:bg-gray-200"
-          >
-            Performance
+          <a href="/teacher/performance" className={getLinkClasses("/teacher/performance")}>
+            <span>Performance</span>
           </a>
 
-          {/* Q & A */}
-          <a
-            href="/teacher/qna"
-            className="block p-2 rounded hover:bg-gray-200"
-          >
-            Q &amp; A
+          <a href="/teacher/qna" className={getLinkClasses("/teacher/qna")}>
+            <span>Q & A</span>
           </a>
 
-          {/* Audit Logs */}
-          <a
-            href="/teacher/audit-logs"
-            className="block p-2 rounded hover:bg-gray-200"
-          >
-            Audit Logs
+          <a href="/teacher/audit-logs" className={getLinkClasses("/teacher/audit-logs")}>
+            <span>Audit Logs</span>
           </a>
+
         </nav>
+
+        {/* Sidebar Footer */}
+        <div className="p-4 border-t border-slate-700/50 text-xs text-slate-500 text-center">
+          v1.0.0 Tuition Master
+        </div>
       </aside>
 
       {/* Main Content Wrapper */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative overflow-hidden">
         
-        {/* Header */}
-        <header className="bg-white shadow p-4">
-          <h1 className="text-xl font-semibold">Teacher Dashboard</h1>
+        {/* Top Header */}
+        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-10 shadow-sm">
+          <h1 className="text-xl font-semibold text-slate-800">Teacher Dashboard</h1>
+          
+          <div className="flex items-center gap-4">
+             <button className="p-2 text-slate-400 hover:text-primary transition-colors relative">
+                <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full"></span>
+                🔔
+             </button>
+            <div className="flex items-center gap-3 pl-4 border-l border-slate-200 cursor-pointer group">
+              <div className="text-right hidden md:block">
+                <p className="text-sm font-medium text-slate-700 group-hover:text-primary transition-colors">Teacher User</p>
+                <p className="text-xs text-slate-400">Instructor</p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border-2 border-transparent group-hover:border-primary transition-all">
+                <img src="https://ui-avatars.com/api/?name=Teacher+User&background=10B981&color=fff" alt="Profile" />
+              </div>
+            </div>
+          </div>
         </header>
 
         {/* Page Content */}
-        <main className="p-6 overflow-y-auto">
-          {children}
+        <main className="flex-1 overflow-y-auto p-8 bg-background scroll-smooth">
+          <div className="w-full mx-auto animate-fade-in-up">
+            {children}
+          </div>
         </main>
-
       </div>
     </div>
   );

@@ -60,50 +60,66 @@ const MarkAttendance = () => {
 
   return (
     <TeacherLayout>
-      <h2 className="w-screen text-2xl font-semibold mb-4 text-black">
-        Mark Attendance
-      </h2>
+      <div className="w-full animate-fade-in-up">
+        <h2 className="text-2xl font-bold text-slate-800 mb-6">
+          Mark Attendance
+        </h2>
 
-      <AttendanceFilters
-        filters={filters}
-        setFilters={setFilters}
-        onSearch={fetchAttendance}
-      />
+        <AttendanceFilters
+          filters={filters}
+          setFilters={setFilters}
+          onSearch={fetchAttendance}
+        />
 
-      <table className="w-full border text-black">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 border">Student</th>
-            <th className="p-2 border">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {attendance.map((a) => (
-            <tr key={`${a.studentId}-${a.date}`}>
-              <td className="p-2 border">{a.studentName}</td>
-              <td className="p-2 border flex gap-2">
-                <button
-                  onClick={() =>
-                    markStatus(a.studentId, a.studentName, "PRESENT")
-                  }
-                  className="bg-green-600 text-white px-3 py-1 rounded"
-                >
-                  Present
-                </button>
+        {attendance.length > 0 ? (
+          <div className="bg-white shadow-glass rounded-xl border border-slate-100 overflow-hidden">
+            <table className="min-w-full divide-y divide-slate-200">
+              <thead className="bg-slate-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Student Name</th>
+                   <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Student ID</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Mark Status</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-slate-200">
+                {attendance.map((a) => (
+                  <tr key={`${a.studentId}-${a.date}`} className="hover:bg-slate-50/80 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
+                       {a.studentName}
+                    </td>
+                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                       #{a.studentId}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-end gap-3">
+                      <button
+                        onClick={() =>
+                          markStatus(a.studentId, a.studentName, "PRESENT")
+                        }
+                        className="px-4 py-1.5 bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-full text-xs font-bold transition-all uppercase tracking-wide"
+                      >
+                        Present
+                      </button>
 
-                <button
-                  onClick={() =>
-                    markStatus(a.studentId, a.studentName, "ABSENT")
-                  }
-                  className="bg-red-600 text-white px-3 py-1 rounded"
-                >
-                  Absent
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                      <button
+                        onClick={() =>
+                          markStatus(a.studentId, a.studentName, "ABSENT")
+                        }
+                        className="px-4 py-1.5 bg-rose-100 text-rose-700 hover:bg-rose-600 hover:text-white rounded-full text-xs font-bold transition-all uppercase tracking-wide"
+                      >
+                        Absent
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-white rounded-xl border border-slate-100 text-slate-500">
+             No students found for attendance marking. Please refine your search.
+          </div>
+        )}
+      </div>
     </TeacherLayout>
   );
 };

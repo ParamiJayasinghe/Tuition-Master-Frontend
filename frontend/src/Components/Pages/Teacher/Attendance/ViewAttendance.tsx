@@ -34,32 +34,48 @@ const ViewAttendance = () => {
 
   return (
     <TeacherLayout>
-      <h2 className="text-black w-screen text-2xl font-semibold mb-4">View Attendance</h2>
+      <div className="w-full animate-fade-in-up">
+        <h2 className="text-2xl font-bold text-slate-800 mb-6">View Attendance</h2>
 
-      <AttendanceFilters
-        filters={filters}
-        setFilters={setFilters}
-        onSearch={fetchAttendance}
-      />
+        <AttendanceFilters
+          filters={filters}
+          setFilters={setFilters}
+          onSearch={fetchAttendance}
+        />
 
-      <table className="w-full border text-black">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 border">Student</th>
-            <th className="p-2 border">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {attendance.map((a) => (
-            <tr key={a.id}>
-              <td className="p-2 border">{a.studentName}</td>
-              <td className="p-2 border font-semibold">
-                {a.status}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        {attendance.length > 0 ? (
+           <div className="bg-white shadow-glass rounded-xl border border-slate-100 overflow-hidden">
+             <table className="min-w-full divide-y divide-slate-200">
+               <thead className="bg-slate-50">
+                 <tr>
+                   <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Student Name</th>
+                   <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                 </tr>
+               </thead>
+               <tbody className="bg-white divide-y divide-slate-200">
+                 {attendance.map((a) => (
+                   <tr key={a.id} className="hover:bg-slate-50/80 transition-colors">
+                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{a.studentName}</td>
+                     <td className="px-6 py-4 whitespace-nowrap text-sm">
+                       <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${
+                         a.status === "PRESENT" 
+                           ? "bg-emerald-100 text-emerald-700" 
+                           : "bg-rose-100 text-rose-700"
+                       }`}>
+                         {a.status}
+                       </span>
+                     </td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
+           </div>
+        ) : (
+           <div className="text-center py-12 bg-white rounded-xl border border-slate-100 text-slate-500">
+              No attendance records found.
+           </div>
+        )}
+      </div>
     </TeacherLayout>
   );
 };

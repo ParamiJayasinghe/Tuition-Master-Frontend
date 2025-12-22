@@ -60,53 +60,59 @@ const TeacherProfiles: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="w-screen">
+      <div className="w-full">
         <h2 className="text-2xl font-bold mb-6 text-black">Teacher Profiles</h2>
 
         {loading && <p>Loading teachers...</p>}
         {error && <p className="text-red-600">{error}</p>}
 
         {!loading && teachers.length > 0 && (
-          <div className="overflow-x-auto bg-white shadow rounded">
-            <table className="min-w-full border">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="p-3 border text-black">Teacher ID</th>
-                  <th className="p-3 border text-black">Full Name</th>
-                  <th className="p-3 border text-black">Email</th>
-                  <th className="p-3 border text-black">Subjects</th>
-                  <th className="p-3 border text-black">Status</th>
-                  <th className="p-3 border text-black">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {teachers.map((teacher) => (
-                  <tr key={teacher.id} className="text-center text-black">
-                    <td className="p-3 border">
-                      {teacher.teacherDetails.teacherId}
-                    </td>
-                    <td className="p-3 border">
-                      {teacher.teacherDetails.fullName}
-                    </td>
-                    <td className="p-3 border">{teacher.email}</td>
-                    <td className="p-3 border">
-                      {teacher.teacherDetails.subjects}
-                    </td>
-                    <td className="p-3 border">
-                      {teacher.isActive ? "Active" : "Inactive"}
-                    </td>
-                    <td className="p-3 border">
-                      <button
-                        onClick={() => setSelectedTeacher(teacher)}
-                        className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-                      >
-                        View
-                      </button>
-                    </td>
+          <div className="bg-white shadow-glass rounded-xl border border-slate-100 overflow-hidden animate-fade-in-up">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-slate-200">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Teacher ID</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Full Name</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Subjects</th>
+                    <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-slate-200">
+                  {teachers.map((teacher) => (
+                    <tr key={teacher.id} className="hover:bg-slate-50/80 transition-colors duration-150">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
+                        {teacher.teacherDetails.teacherId}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
+                        {teacher.teacherDetails.fullName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        {teacher.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        {teacher.teacherDetails.subjects}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${teacher.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
+                          {teacher.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => setSelectedTeacher(teacher)}
+                          className="text-primary hover:text-emerald-700 font-medium transition-colors"
+                        >
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 

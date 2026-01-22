@@ -10,9 +10,11 @@ import StudentProfiles from "./Components/Pages/Teacher/StudentProfile";
 import AddAssignment from "./Components/Pages/Teacher/AddAssignment";
 import ViewAssignments from "./Components/Pages/Teacher/ViewAssignment";
 import AttendanceHome from "./Components/Pages/Teacher/Attendance/AttendanceHome";
-import MarkAttendance from "./Components/Pages/Teacher/Attendance/MarkAttendance"
+import MarkAttendance from "./Components/Pages/Teacher/Attendance/MarkAttendance";
 import ViewAttendance from "./Components/Pages/Teacher/Attendance/ViewAttendance";
-import ClassFee from "./Components/Pages/Teacher/ClassFee";
+import ClassFee from "./Components/Pages/Teacher/ClassFee/ClassFee";
+import MarkClassFee from "./Components/Pages/Teacher/ClassFee/MarkClassFee";
+import ViewClassFees from "./Components/Pages/Teacher/ClassFee/ViewClassFee";
 import Performance from "./Components/Pages/Teacher/Performance";
 import QnA from "./Components/Pages/Teacher/QnA";
 import AuditLogs from "./Components/Pages/Teacher/AuditLogs";
@@ -27,23 +29,35 @@ function App() {
   return (
     <Routes>
       <Route path="/signin" element={<SignIn />} />
+
+      {/* Admin */}
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
       <Route path="/admin/add-teacher" element={<AddTeacher />} />
-      <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-      <Route path="/student/dashboard" element={<StudentDashboard />} />
       <Route path="/admin/teachers/profiles" element={<TeacherProfiles />} />
+
+      {/* Teacher */}
       <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
       <Route path="/teacher/students/add" element={<AddStudent />} />
       <Route path="/teacher/students" element={<StudentProfiles />} />
       <Route path="/teacher/assignments/add" element={<AddAssignment />} />
       <Route path="/teacher/assignments" element={<ViewAssignments />} />
+
+      {/* Attendance */}
       <Route path="/teacher/attendance" element={<AttendanceHome />} />
       <Route path="/teacher/attendance/mark" element={<MarkAttendance />} />
-<Route path="/teacher/attendance/view" element={<ViewAttendance />} />
+      <Route path="/teacher/attendance/view" element={<ViewAttendance />} />
+
+      {/* Class Fees */}
       <Route path="/teacher/class-fee" element={<ClassFee />} />
+      <Route path="/teacher/class-fees/mark" element={<MarkClassFee />} />
+      <Route path="/teacher/class-fees/view" element={<ViewClassFees />} />
+
+      {/* Teacher misc */}
       <Route path="/teacher/performance" element={<Performance />} />
       <Route path="/teacher/qna" element={<QnA />} />
       <Route path="/teacher/audit-logs" element={<AuditLogs />} />
+
+      {/* Student */}
       <Route path="/student/dashboard" element={<StudentDashboard />} />
       <Route path="/student/performance" element={<StudentPerformance />} />
       <Route path="/student/assignments" element={<StudentAssignments />} />

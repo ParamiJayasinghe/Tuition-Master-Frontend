@@ -42,8 +42,8 @@ const MarkClassFee = () => {
         method: "GET",
       });
 
-      // The backend now returns virtual PENDING fees, so we can display them directly.
-      // Filter locally just in case, though backend handles it.
+      // The backend returns virtual PENDING fees if no paid fee exists.
+      // We filter locally as a safety measure to ensure only PENDING items show up in this specific list.
       setStudents(data.filter((s: StudentFee) => s.status === "PENDING"));
     } catch (err) {
       console.error(err);
@@ -53,13 +53,13 @@ const MarkClassFee = () => {
   const markPaid = async (studentFee: StudentFee) => {
     try {
       if (studentFee.id) {
-        // Existing fee record
+        // Existing fee record (if any PENDING record actually existed in DB)
         await authFetch(`http://localhost:8080/api/fees/${studentFee.id}`, {
           method: "PUT",
           body: JSON.stringify({ status: "PAID" }),
         });
       } else {
-        // Virtual fee record - create new
+        // Virtual fee record - create new PAID record
         await authFetch(`http://localhost:8080/api/fees`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -68,15 +68,15 @@ const MarkClassFee = () => {
             subject: studentFee.subject,
             month: studentFee.month,
             year: studentFee.year,
-            amount: studentFee.amount || 0, // Default to 0 if not set
+            amount: studentFee.amount || 0, 
             status: "PAID",
-            dueDate: new Date().toISOString().split('T')[0], // Default due date
+            dueDate: new Date().toISOString().split('T')[0],
             grade: studentFee.grade,
           }),
         });
       }
 
-      // Refresh the list
+      // Refresh the list - the student should disappear as they are now PAID
       fetchStudents();
     } catch (err) {
       console.error(err);

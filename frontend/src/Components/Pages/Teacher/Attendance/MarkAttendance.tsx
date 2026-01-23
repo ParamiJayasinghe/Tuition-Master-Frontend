@@ -32,6 +32,7 @@ const MarkAttendance = () => {
     studentName: string,
     status: "PRESENT" | "ABSENT"
   ) => {
+
     try {
       const payload = [
         {
@@ -49,8 +50,9 @@ const MarkAttendance = () => {
       });
 
       fetchAttendance();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      alert(error.message);
     }
   };
 
@@ -60,7 +62,7 @@ const MarkAttendance = () => {
 
   return (
     <TeacherLayout>
-      <div className="w-full animate-fade-in-up">
+      <div className="w-screen animate-fade-in-up">
         <h2 className="text-2xl font-bold text-slate-800 mb-6">
           Mark Attendance
         </h2>

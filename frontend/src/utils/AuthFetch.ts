@@ -14,7 +14,21 @@ export const authFetch = async (
   });
 
   if (!response.ok) {
-    throw new Error("Request failed");
+    let errorMessage = "Request failed";
+    try {
+      const text = await response.text();
+      try {
+        const errorData = JSON.parse(text);
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch {
+        // If not JSON, use the text itself if not empty, otherwise status text
+        errorMessage = text || response.statusText;
+      }
+    } catch (e) {
+      // Fallback if reading text fails
+      errorMessage = response.statusText;
+    }
+    throw new Error(errorMessage);
   }
 
   return response.json();

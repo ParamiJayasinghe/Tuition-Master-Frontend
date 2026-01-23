@@ -50,13 +50,23 @@ const MarkClassFee = () => {
     }
   };
 
+  const handleAmountChange = (index: number, value: string) => {
+    const newStudents = [...students];
+    newStudents[index].amount = Number(value);
+    setStudents(newStudents);
+  };
+
   const markPaid = async (studentFee: StudentFee) => {
     try {
       if (studentFee.id) {
         // Existing fee record (if any PENDING record actually existed in DB)
         await authFetch(`http://localhost:8080/api/fees/${studentFee.id}`, {
           method: "PUT",
-          body: JSON.stringify({ status: "PAID" }),
+          body: JSON.stringify({ 
+            status: "PAID",
+            amount: studentFee.amount, // Ensure updated amount is sent
+            paidOn: new Date().toISOString().split('T')[0] // Set paid date to today
+          }),
         });
       } else {
         // Virtual fee record - create new PAID record
@@ -70,14 +80,20 @@ const MarkClassFee = () => {
             year: studentFee.year,
             amount: studentFee.amount || 0, 
             status: "PAID",
-            dueDate: new Date().toISOString().split('T')[0],
+            // Calculate last day of the specific fee month
+            dueDate: new Date(Number(studentFee.year), Number(studentFee.month), 0).toISOString().split('T')[0],
+            // Paid on today
+            paidOn: new Date().toISOString().split('T')[0],
             grade: studentFee.grade,
           }),
         });
       }
 
       // Refresh the list - the student should disappear as they are now PAID
-      fetchStudents();
+      // fetchStudents(); 
+      // Optimization: Instead of refetching, just remove the student from the list locally
+      setStudents(students.filter(s => s.studentId !== studentFee.studentId || s.subject !== studentFee.subject));
+
     } catch (err) {
       console.error(err);
       alert("Failed to mark as paid");
@@ -178,7 +194,13 @@ const MarkClassFee = () => {
                       {s.month}/{s.year}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {s.amount}
+                      <input
+                        type="number"
+                        className="border border-slate-300 rounded px-2 py-1 w-24 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        value={s.amount || ""}
+                        onChange={(e) => handleAmountChange(index, e.target.value)}
+                        placeholder="0.00"
+                      />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button

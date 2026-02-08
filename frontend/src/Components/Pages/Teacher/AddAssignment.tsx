@@ -5,11 +5,11 @@ const AddAssignment = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    fileUrl: "",
     dueDate: "",
     grade: "",
     subject: "",
   });
+  const [file, setFile] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -21,22 +21,50 @@ const AddAssignment = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
-    // Payload matching the user's requirements
-    const payload = {
-        title: formData.title,
-        description: formData.description,
-        fileUrl: formData.fileUrl,
-        dueDate: formData.dueDate,
-        grade: formData.grade,
-        subject: formData.subject
-    };
-
     try {
+        let uploadedFileUrl = "";
+
+        // 1. Upload File if selected
+        if (file) {
+            const uploadFormData = new FormData();
+            uploadFormData.append("file", file);
+
+            const uploadResponse = await fetch("http://localhost:8080/api/assignments/upload", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: uploadFormData,
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error("Failed to upload file");
+            }
+
+            uploadedFileUrl = await uploadResponse.text();
+        }
+
+        // 2. Create Assignment with file URL
+        const payload = {
+            title: formData.title,
+            description: formData.description,
+            fileUrl: uploadedFileUrl,
+            dueDate: formData.dueDate,
+            grade: formData.grade,
+            subject: formData.subject
+        };
+
       const response = await fetch("http://localhost:8080/api/assignments", {
         method: "POST",
         headers: {
@@ -55,12 +83,13 @@ const AddAssignment = () => {
       setFormData({
         title: "",
         description: "",
-        fileUrl: "",
         dueDate: "",
         grade: "",
         subject: "",
       });
+      setFile(null);
     } catch (error) {
+      console.error(error);
       setMessage("❌ Error adding assignment");
     } finally {
       setLoading(false);
@@ -115,15 +144,14 @@ const AddAssignment = () => {
                      </div>
 
                      <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-slate-700 mb-2">File URL (Optional)</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Upload File (PDF)</label>
                         <input
-                           type="url"
-                           name="fileUrl"
-                           placeholder="https://example.com/assignment.pdf"
-                           value={formData.fileUrl}
-                           onChange={handleChange}
-                           className="w-full px-4 py-2 text-slate-900 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                           type="file"
+                           accept=".pdf"
+                           onChange={handleFileChange}
+                           className="w-full px-4 py-2 text-slate-900 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                         />
+                        {file && <p className="text-sm text-slate-500 mt-1">Selected: {file.name}</p>}
                      </div>
 
                      <div>

@@ -1,21 +1,26 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const TeacherLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [studentsOpen, setStudentsOpen] = useState(false);
   const [assignmentsOpen, setAssignmentsOpen] = useState(false);
+  const location = useLocation();
 
-  // Helper for active link styling (mock logic)
-  const getLinkClasses = (path: string) => {
-    const isActive = false; 
+  // Helper for active link styling
+  const getLinkClasses = (pathUrl: string) => {
+    const isActive = location.pathname === pathUrl;
     return `block p-3 rounded-lg transition-all duration-200 flex items-center gap-3 ${
-      isActive 
-        ? "bg-primary/10 text-primary font-medium" 
+      isActive
+        ? "bg-primary/10 text-primary font-medium"
         : "text-slate-400 hover:bg-slate-800 hover:text-white"
     }`;
   };
 
-  const getSubLinkClasses = (path: string) => {
-    return "block py-2 pl-4 text-sm text-slate-400 hover:text-primary transition-colors";
+  const getSubLinkClasses = (pathUrl: string) => {
+    const isActive = location.pathname === pathUrl;
+    return `block py-2 pl-4 text-sm transition-colors ${
+      isActive ? "text-primary font-medium" : "text-slate-400 hover:text-primary"
+    }`;
   };
 
   return (

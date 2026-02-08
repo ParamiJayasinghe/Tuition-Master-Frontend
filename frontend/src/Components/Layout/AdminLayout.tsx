@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [teachersOpen, setTeachersOpen] = useState(false);
+  const location = useLocation();
 
-  // Helper for active link styling (mock logic for now, ideally use router)
+  // Helper for active link styling
   const getLinkClasses = (path: string) => {
-    // In a real app, check if current path matches 'path'
-    const isActive = false; 
+    const isActive = location.pathname === path;
     return `block p-3 rounded-lg transition-all duration-200 flex items-center gap-3 ${
       isActive 
         ? "bg-primary/10 text-primary font-medium" 

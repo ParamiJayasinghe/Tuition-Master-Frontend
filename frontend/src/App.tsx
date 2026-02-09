@@ -18,6 +18,7 @@ import ViewClassFees from "./Components/Pages/Teacher/ClassFee/ViewClassFee";
 import Performance from "./Components/Pages/Teacher/Performance";
 import QnA from "./Components/Pages/Teacher/QnA";
 import AuditLogs from "./Components/Pages/Teacher/AuditLogs";
+import AssignmentSubmissions from "./Components/Pages/Teacher/AssignmentSubmissions";
 import StudentPerformance from "./Components/Pages/Student/StudentPerformance";
 import StudentAssignments from "./Components/Pages/Student/StudentAssignments";
 import StudentMaterials from "./Components/Pages/Student/StudentMaterial";
@@ -41,6 +42,7 @@ function App() {
       <Route path="/teacher/students" element={<StudentProfiles />} />
       <Route path="/teacher/assignments/add" element={<AddAssignment />} />
       <Route path="/teacher/assignments" element={<ViewAssignments />} />
+      <Route path="/teacher/assignments/:id/submissions" element={<AssignmentSubmissions />} />
 
       {/* Attendance */}
       <Route path="/teacher/attendance" element={<AttendanceHome />} />

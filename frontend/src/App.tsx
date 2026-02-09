@@ -19,7 +19,7 @@ import Performance from "./Components/Pages/Teacher/Performance";
 import QnA from "./Components/Pages/Teacher/QnA";
 import AuditLogs from "./Components/Pages/Teacher/AuditLogs";
 import StudentPerformance from "./Components/Pages/Student/StudentPerformance";
-import StudentAssignments from "./Components/Pages/Student/StudentAssignment";
+import StudentAssignments from "./Components/Pages/Student/StudentAssignments";
 import StudentMaterials from "./Components/Pages/Student/StudentMaterial";
 import StudentQuestions from "./Components/Pages/Student/StudentQuestions";
 import StudentAttendance from "./Components/Pages/Student/StudentAttendance";

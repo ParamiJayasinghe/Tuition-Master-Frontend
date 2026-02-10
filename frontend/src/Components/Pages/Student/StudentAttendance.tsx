@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import StudentLayout from "../../Layout/StudentLayout";
 import { authFetch } from "../../../utils/AuthFetch";
 import type { Attendance } from "../Teacher/Attendance/types";
+import DateRangePicker from "../../Common/DateRangePicker";
 
 const StudentAttendance = () => {
   const [attendance, setAttendance] = useState<Attendance[]>([]);
@@ -111,7 +112,7 @@ const StudentAttendance = () => {
 
         {/* Filters */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">Subject</label>
               <input 
@@ -122,24 +123,12 @@ const StudentAttendance = () => {
                 onChange={(e) => setFilters({...filters, subject: e.target.value})}
               />
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">From Date</label>
-              <input 
-                type="date" 
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-slate-600"
-                value={filters.dateFrom}
-                onChange={(e) => setFilters({...filters, dateFrom: e.target.value})}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">To Date</label>
-              <input 
-                type="date" 
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-slate-600"
-                value={filters.dateTo}
-                onChange={(e) => setFilters({...filters, dateTo: e.target.value})}
-              />
-            </div>
+            <DateRangePicker 
+              startDate={filters.dateFrom}
+              endDate={filters.dateTo}
+              onChange={(start: string, end: string) => setFilters({...filters, dateFrom: start, dateTo: end})}
+              label="Filter by Date Range"
+            />
           </div>
         </div>
 

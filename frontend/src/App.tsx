@@ -9,6 +9,8 @@ import AddStudent from "./Components/Pages/Teacher/AddStudent";
 import StudentProfiles from "./Components/Pages/Teacher/StudentProfile";
 import AddAssignment from "./Components/Pages/Teacher/AddAssignment";
 import ViewAssignments from "./Components/Pages/Teacher/ViewAssignment";
+import AddMaterial from "./Components/Pages/Teacher/AddMaterial";
+import ViewMaterials from "./Components/Pages/Teacher/ViewMaterials";
 import AttendanceHome from "./Components/Pages/Teacher/Attendance/AttendanceHome";
 import MarkAttendance from "./Components/Pages/Teacher/Attendance/MarkAttendance";
 import ViewAttendance from "./Components/Pages/Teacher/Attendance/ViewAttendance";
@@ -43,6 +45,8 @@ function App() {
       <Route path="/teacher/assignments/add" element={<AddAssignment />} />
       <Route path="/teacher/assignments" element={<ViewAssignments />} />
       <Route path="/teacher/assignments/:id/submissions" element={<AssignmentSubmissions />} />
+      <Route path="/teacher/materials/add" element={<AddMaterial />} />
+      <Route path="/teacher/materials" element={<ViewMaterials />} />
 
       {/* Attendance */}
       <Route path="/teacher/attendance" element={<AttendanceHome />} />

@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 const TeacherLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [studentsOpen, setStudentsOpen] = useState(false);
   const [assignmentsOpen, setAssignmentsOpen] = useState(false);
+  const [materialsOpen, setMaterialsOpen] = useState(false);
   const location = useLocation();
 
   // Helper for active link styling
@@ -83,6 +84,28 @@ const TeacherLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <ul className="pl-4 space-y-1 border-l-2 border-slate-700 ml-4">
                 <li><a href="/teacher/assignments/add" className={getSubLinkClasses("/teacher/assignments/add")}>Add Assignment</a></li>
                 <li><a href="/teacher/assignments" className={getSubLinkClasses("/teacher/assignments")}>View Assignments</a></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Materials Accordion */}
+          <div>
+            <button
+              onClick={() => setMaterialsOpen(!materialsOpen)}
+              className={`w-full flex justify-between items-center p-3 rounded-lg transition-colors duration-200 text-slate-400 hover:bg-slate-800 hover:text-white ${materialsOpen ? 'text-white bg-slate-800' : ''}`}
+            >
+              <div className="flex items-center gap-3">
+                <span>Materials</span>
+              </div>
+              <span className={`transform transition-transform duration-200 ${materialsOpen ? "rotate-180" : ""}`}>
+                ▼
+              </span>
+            </button>
+
+            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${materialsOpen ? 'max-h-40 opacity-100 mt-1' : 'max-h-0 opacity-0'}`}>
+              <ul className="pl-4 space-y-1 border-l-2 border-slate-700 ml-4">
+                <li><a href="/teacher/materials/add" className={getSubLinkClasses("/teacher/materials/add")}>Add Material</a></li>
+                <li><a href="/teacher/materials" className={getSubLinkClasses("/teacher/materials")}>View Materials</a></li>
               </ul>
             </div>
           </div>

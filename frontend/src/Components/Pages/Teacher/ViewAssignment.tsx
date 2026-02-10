@@ -342,17 +342,29 @@ const ViewAssignments = () => {
                           <div className="mt-4">
                              <div className="flex justify-between items-center mb-2">
                                 <span className="text-sm font-semibold text-slate-500">Attachment:</span>
-                                <a 
-                                   href={selectedAssignment.fileUrl} 
-                                   target="_blank" 
-                                   rel="noopener noreferrer"
-                                   className="text-sm bg-primary/10 text-primary hover:bg-primary/20 px-3 py-1 rounded-full font-medium transition-colors flex items-center gap-2"
-                                >
-                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                   </svg>
-                                   Open PDF in New Tab
-                                </a>
+                                 <div className="flex gap-2">
+                                    <a 
+                                       href={selectedAssignment.fileUrl} 
+                                       target="_blank" 
+                                       rel="noopener noreferrer"
+                                       className="text-xs bg-slate-50 text-primary hover:bg-primary/5 px-3 py-1.5 rounded-lg font-bold transition-all border border-slate-100 flex items-center gap-1.5"
+                                    >
+                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                       </svg>
+                                       Preview
+                                    </a>
+                                    <a 
+                                       href={selectedAssignment.fileUrl} 
+                                       download
+                                       className="text-xs bg-primary text-white hover:bg-emerald-600 px-3 py-1.5 rounded-lg font-bold transition-all shadow-sm flex items-center gap-1.5"
+                                    >
+                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                       </svg>
+                                       Download
+                                    </a>
+                                 </div>
                              </div>
                              
                              <div className="border border-slate-200 rounded-lg overflow-hidden h-64 bg-slate-50 flex items-center justify-center relative group">

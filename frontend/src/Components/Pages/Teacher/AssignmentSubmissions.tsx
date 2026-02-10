@@ -156,17 +156,29 @@ const AssignmentSubmissions = () => {
                                <td className="px-8 py-5 whitespace-nowrap text-right">
                                   <div className="flex justify-end items-center gap-3">
                                      {sub.fileUrl ? (
-                                        <a 
-                                           href={sub.fileUrl} 
-                                           target="_blank" 
-                                           rel="noopener noreferrer"
-                                           className="px-4 py-2 bg-slate-50 text-primary hover:bg-primary hover:text-white rounded-xl text-sm font-bold transition-all flex items-center gap-2 border border-slate-100"
-                                        >
-                                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                           </svg>
-                                           View Answer
-                                        </a>
+                                         <> 
+                                            <a 
+                                               href={sub.fileUrl} 
+                                               target="_blank" 
+                                               rel="noopener noreferrer"
+                                               className="px-3 py-1.5 bg-slate-50 text-primary hover:bg-primary/5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-100"
+                                            >
+                                               <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                               </svg>
+                                               Preview
+                                            </a>
+                                            <a 
+                                               href={sub.fileUrl} 
+                                               download
+                                               className="px-3 py-1.5 bg-primary text-white hover:bg-emerald-600 rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
+                                            >
+                                               <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                               </svg>
+                                               Download
+                                            </a>
+                                         </>
                                      ) : (
                                         <span className="text-xs text-slate-400 italic">No file attached</span>
                                      )}

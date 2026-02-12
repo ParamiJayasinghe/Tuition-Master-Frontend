@@ -118,7 +118,7 @@ const TeacherLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <span>Class Fee</span>
           </a>
 
-          <a href="/teacher/performance" className={getLinkClasses("/teacher/performance")}>
+          <a href="/teacher/students" className={getLinkClasses("/teacher/students")}>
             <span>Performance</span>
           </a>
 

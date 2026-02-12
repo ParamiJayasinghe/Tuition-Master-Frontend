@@ -22,6 +22,7 @@ const StudentAssignments = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'active' | 'past'>('active');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [subjectFilter, setSubjectFilter] = useState("");
 
   useEffect(() => {
     fetchAssignments();
@@ -88,6 +89,29 @@ const StudentAssignments = () => {
           </div>
         </div>
 
+        {/* Filter Section */}
+        <div className="bg-white p-4 rounded-xl shadow-glass border border-slate-100 mb-8 flex flex-col md:flex-row gap-4 items-end animate-fade-in">
+          <div className="flex-1 w-full">
+            <label className="block text-sm font-medium text-slate-700 mb-1">Filter by Subject</label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="e.g. Mathematics..."
+                className="w-full pl-10 pr-4 py-2 text-slate-900 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"
+                value={subjectFilter}
+                onChange={(e) => setSubjectFilter(e.target.value)}
+              />
+              <span className="absolute left-3 top-2.5 text-slate-400 text-sm">🔍</span>
+            </div>
+          </div>
+          <button
+            onClick={() => setSubjectFilter("")}
+            className="px-4 py-2 text-slate-500 hover:text-rose-500 text-sm font-medium transition-colors mb-1"
+          >
+            Clear Filter
+          </button>
+        </div>
+
         {loading ? (
           <div className="flex items-center justify-center p-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -96,6 +120,7 @@ const StudentAssignments = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
             {assignments
               .filter(a => activeTab === 'active' ? a.isActive : !a.isActive)
+              .filter(a => a.subject.toLowerCase().includes(subjectFilter.toLowerCase()))
               .map((assignment) => (
                 <div key={assignment.id} className="bg-white rounded-xl shadow-glass border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
                    <div className="p-6 flex-1">
@@ -149,20 +174,25 @@ const StudentAssignments = () => {
                       </button>
                    </div>
                 </div>
-              ))}
+             ))}
             
-            {assignments.filter(a => activeTab === 'active' ? a.isActive : !a.isActive).length === 0 && (
+            {assignments.filter(a => 
+              (activeTab === 'active' ? a.isActive : !a.isActive) &&
+              a.subject.toLowerCase().includes(subjectFilter.toLowerCase())
+            ).length === 0 && (
                <div className="col-span-full py-16 text-center bg-white rounded-2xl border border-slate-100 border-dashed">
                   <div className="text-5xl mb-4 opacity-50">
                     {activeTab === 'active' ? "🎉" : "📄"}
                   </div>
                   <h3 className="text-lg font-semibold text-slate-800">
-                    {activeTab === 'active' ? "All caught up!" : "No old assignments"}
+                    {activeTab === 'active' 
+                      ? (subjectFilter ? "No matching assignments" : "All caught up!") 
+                      : (subjectFilter ? "No matching assignments in archive" : "No old assignments")}
                   </h3>
                   <p className="text-slate-500 mt-2 max-w-xs mx-auto">
                     {activeTab === 'active' 
-                      ? "No pending assignments found for your subjects." 
-                      : "You don't have any assignments in the past due archive."}
+                      ? (subjectFilter ? `No active assignments found for "${subjectFilter}".` : "No pending assignments found for your subjects.") 
+                      : (subjectFilter ? `No past assignments found for "${subjectFilter}".` : "You don't have any assignments in the past due archive.")}
                   </p>
                </div>
             )}

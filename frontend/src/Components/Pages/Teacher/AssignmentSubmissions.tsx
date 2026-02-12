@@ -9,6 +9,8 @@ interface Submission {
   isLate: boolean;
   fileUrl: string;
   answerText: string;
+  marks: number | null;
+  isMarked: boolean;
 }
 
 interface Assignment {
@@ -57,6 +59,26 @@ const AssignmentSubmissions = () => {
       console.error("Error fetching submission data:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMarkSubmission = async (submissionId: number, marks: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/assignments/submissions/${submissionId}/mark?marks=${marks}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.ok) {
+        // Update local state
+        setSubmissions(prev => prev.map(s => s.id === submissionId ? { ...s, marks, isMarked: true } : s));
+      } else {
+        alert("Failed to mark submission");
+      }
+    } catch (error) {
+      console.error("Error marking submission:", error);
     }
   };
 
@@ -119,6 +141,7 @@ const AssignmentSubmissions = () => {
                             <th className="px-8 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Student Name</th>
                             <th className="px-8 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Submission Date</th>
                             <th className="px-8 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                            <th className="px-8 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Marks</th>
                             <th className="px-8 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Action</th>
                          </tr>
                       </thead>
@@ -152,6 +175,25 @@ const AssignmentSubmissions = () => {
                                   }`}>
                                      {sub.isLate ? "Late Submission" : "On Time"}
                                   </span>
+                               </td>
+                               <td className="px-8 py-5 whitespace-nowrap">
+                                  <div className="flex items-center gap-2">
+                                     <input 
+                                        type="number" 
+                                        placeholder="0"
+                                        className="w-16 px-2 py-1 border border-slate-200 rounded text-sm focus:ring-1 focus:ring-primary outline-none"
+                                        defaultValue={sub.marks || ""}
+                                        onBlur={(e) => {
+                                           const val = parseInt(e.target.value);
+                                           if (!isNaN(val) && val !== sub.marks) {
+                                              handleMarkSubmission(sub.id, val);
+                                           }
+                                        }}
+                                     />
+                                     {sub.isMarked && (
+                                        <span className="text-emerald-500 text-xs font-bold">✓</span>
+                                     )}
+                                  </div>
                                </td>
                                <td className="px-8 py-5 whitespace-nowrap text-right">
                                   <div className="flex justify-end items-center gap-3">

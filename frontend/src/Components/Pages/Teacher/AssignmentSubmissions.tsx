@@ -26,6 +26,7 @@ const AssignmentSubmissions = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [assignment, setAssignment] = useState<Assignment | null>(null);
   const [loading, setLoading] = useState(true);
+  const [markedFilter, setMarkedFilter] = useState<'all' | 'marked' | 'unmarked'>('all');
 
   useEffect(() => {
     if (id) {
@@ -125,6 +126,24 @@ const AssignmentSubmissions = () => {
           </div>
         ) : (
           <div className="bg-white rounded-2xl shadow-glass border border-slate-100 overflow-hidden animate-fade-in-up">
+             <div className="px-8 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
+                <h3 className="text-sm font-bold text-slate-700">Submissions List</h3>
+                <div className="flex bg-white p-1 rounded-lg border border-slate-200 shadow-sm">
+                   {(['all', 'marked', 'unmarked'] as const).map((f) => (
+                      <button
+                         key={f}
+                         onClick={() => setMarkedFilter(f)}
+                         className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                            markedFilter === f 
+                            ? "bg-primary text-white shadow-sm" 
+                            : "text-slate-500 hover:text-primary hover:bg-slate-50"
+                         }`}
+                      >
+                         {f.toUpperCase()}
+                      </button>
+                   ))}
+                </div>
+             </div>
              {submissions.length === 0 ? (
                 <div className="py-24 text-center">
                    <div className="text-6xl mb-4 opacity-20">📂</div>
@@ -146,7 +165,13 @@ const AssignmentSubmissions = () => {
                          </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-slate-100">
-                         {submissions.map((sub) => (
+                         {submissions
+                            .filter(sub => {
+                               if (markedFilter === 'marked') return sub.isMarked;
+                               if (markedFilter === 'unmarked') return !sub.isMarked;
+                               return true;
+                            })
+                            .map((sub) => (
                             <tr key={sub.id} className="hover:bg-slate-50/50 transition-colors group">
                                <td className="px-8 py-5 whitespace-nowrap">
                                   <div className="flex items-center gap-3">

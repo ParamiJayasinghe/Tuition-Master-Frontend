@@ -25,6 +25,7 @@ const StudentAssignments = () => {
   const [activeTab, setActiveTab] = useState<'active' | 'past'>('active');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [subjectFilter, setSubjectFilter] = useState("");
+  const [showMarkedOnly, setShowMarkedOnly] = useState(false);
 
   useEffect(() => {
     fetchAssignments();
@@ -106,12 +107,28 @@ const StudentAssignments = () => {
               <span className="absolute left-3 top-2.5 text-slate-400 text-sm">🔍</span>
             </div>
           </div>
-          <button
-            onClick={() => setSubjectFilter("")}
-            className="px-4 py-2 text-slate-500 hover:text-rose-500 text-sm font-medium transition-colors mb-1"
-          >
-            Clear Filter
-          </button>
+          
+          <div className="flex flex-wrap items-end gap-4">
+            <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-lg border border-slate-200 shadow-sm h-[42px]">
+              <input 
+                type="checkbox" 
+                id="markedFilter"
+                checked={showMarkedOnly}
+                onChange={(e) => setShowMarkedOnly(e.target.checked)}
+                className="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary shadow-sm cursor-pointer"
+              />
+              <label htmlFor="markedFilter" className="text-sm font-semibold text-slate-600 cursor-pointer select-none">
+                Show Marked Only
+              </label>
+            </div>
+
+            <button
+              onClick={() => setSubjectFilter("")}
+              className="px-4 py-2 text-slate-500 hover:text-rose-500 text-sm font-medium transition-colors h-[42px]"
+            >
+              Clear Filter
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -123,6 +140,7 @@ const StudentAssignments = () => {
             {assignments
               .filter(a => activeTab === 'active' ? a.isActive : !a.isActive)
               .filter(a => a.subject.toLowerCase().includes(subjectFilter.toLowerCase()))
+              .filter(a => showMarkedOnly ? a.isMarked : true)
               .map((assignment) => (
                 <div key={assignment.id} className="bg-white rounded-xl shadow-glass border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
                    <div className="p-6 flex-1">

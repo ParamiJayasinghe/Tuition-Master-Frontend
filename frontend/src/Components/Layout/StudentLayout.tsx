@@ -23,7 +23,7 @@ const StudentLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   };
 
   return (
-    <div className="flex h-screen bg-background font-sans text-slate-800">
+    <div className="flex min-h-screen w-full bg-background font-sans text-slate-800">
       
       {/* Sidebar */}
       <aside className="w-64 bg-secondary flex flex-col shadow-xl z-20 transition-all duration-300">
@@ -114,7 +114,7 @@ const StudentLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-8 bg-background scroll-smooth">
-          <div className="w-full mx-auto animate-fade-in-up">
+          <div className="w-full animate-fade-in-up">
             {children}
           </div>
         </main>

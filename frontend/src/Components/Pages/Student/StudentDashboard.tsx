@@ -1,7 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../Layout/StudentLayout";
 
 const StudentDashboard: React.FC = () => {
+  const [stats, setStats] = useState([
+    { label: "Subjects Enrolled", value: "...", icon: "📚", trend: "..." },
+    { label: "Assignments Due", value: "...", icon: "📝", trend: "..." },
+    { label: "Attendance Rate", value: "...", icon: "✅", trend: "..." },
+    { label: "Average Grade", value: "...", icon: "🏆", trend: "..." },
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const headers = { Authorization: `Bearer ${token}` };
+
+        // 1. Fetch Performance (Subjects and Average Grade)
+        const perfResp = await fetch("http://localhost:8080/api/performance/me", { headers });
+        const perfData = await perfResp.json();
+        
+        const subjectCount = perfData.subjectPerformances?.length || 0;
+        const totalAvg = perfData.subjectPerformances?.length > 0
+          ? perfData.subjectPerformances.reduce((acc: number, curr: any) => acc + curr.averageMarks, 0) / perfData.subjectPerformances.length
+          : 0;
+        
+        const getLetterGrade = (marks: number) => {
+          if (marks >= 75) return "A";
+          if (marks >= 65) return "B";
+          if (marks >= 55) return "C";
+          if (marks >= 45) return "S";
+          return "F";
+        };
+
+        // 2. Fetch Assignments Due
+        const assignmentsResp = await fetch("http://localhost:8080/api/assignments", { headers });
+        const assignmentsData = await assignmentsResp.json();
+        const dueCount = assignmentsData.filter((a: any) => !a.isSubmitted && a.isActive).length;
+
+        // 3. Fetch Attendance Rate
+        const attendanceResp = await fetch("http://localhost:8080/api/attendance/my-attendance", { headers });
+        const attendanceData = await attendanceResp.json();
+        
+        let attendanceRate = "0%";
+        if (attendanceData.length > 0) {
+          const presentCount = attendanceData.filter((a: any) => a.status === "PRESENT").length;
+          const rate = Math.round((presentCount / attendanceData.length) * 100);
+          attendanceRate = `${rate}%`;
+        }
+
+        setStats([
+          { label: "Subjects Enrolled", value: subjectCount.toString(), icon: "📚", trend: "Active" },
+          { label: "Assignments Due", value: dueCount.toString(), icon: "📝", trend: dueCount > 0 ? "Urgent" : "Cleared" },
+          { label: "Attendance Rate", value: attendanceRate, icon: "✅", trend: "Overall" },
+          { label: "Average Grade", value: getLetterGrade(totalAvg), icon: "🏆", trend: `${Math.round(totalAvg)}%` },
+        ]);
+      } catch (error) {
+        console.error("Error fetching student dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   return (
     <DashboardLayout>
       <div className="w-full space-y-6 animate-fade-in-up">
@@ -20,17 +84,14 @@ const StudentDashboard: React.FC = () => {
 
         {/* 2. Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { label: "Subjects Enrolled", value: "6", icon: "📚", trend: "Active" },
-            { label: "Assignments Due", value: "3", icon: "📝", trend: "Urgent" },
-            { label: "Attendance Rate", value: "95%", icon: "✅", trend: "+2%" },
-            { label: "Average Grade", value: "A-", icon: "🏆", trend: "Top 10%" },
-          ].map((stat, index) => (
+          {stats.map((stat, index) => (
             <div key={index} className="bg-white p-6 rounded-xl shadow-glass border border-slate-100 hover:scale-[1.02] transition-transform duration-200">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-slate-500 text-sm font-medium">{stat.label}</p>
-                  <h3 className="text-3xl font-bold text-slate-800 mt-2">{stat.value}</h3>
+                  <h3 className="text-3xl font-bold text-slate-800 mt-2">
+                    {loading ? <span className="animate-pulse">...</span> : stat.value}
+                  </h3>
                 </div>
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl">
                   {stat.icon}
@@ -59,7 +120,7 @@ const StudentDashboard: React.FC = () => {
                  { subject: "English", time: "03:00 PM - 04:30 PM", room: "Room B4", teacher: "Mrs. Davis" },
                ].map((cls, i) => (
                  <div key={i} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100 hover:border-primary/30 transition-colors">
-                    <div>
+                     <div>
                        <h4 className="font-semibold text-slate-800">{cls.subject}</h4>
                        <p className="text-sm text-slate-500">{cls.teacher} • {cls.room}</p>
                     </div>

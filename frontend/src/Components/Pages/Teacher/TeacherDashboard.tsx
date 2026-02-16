@@ -1,7 +1,76 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../Layout/TeacherLayout";
 
 const TeacherDashboard: React.FC = () => {
+  const [stats, setStats] = useState([
+    { label: "My Students", value: "...", icon: "🎓", trend: "..." },
+    { label: "Pending Assignments", value: "...", icon: "📝", trend: "..." },
+    { label: "Attendance Rate", value: "...", icon: "📊", trend: "..." },
+    { label: "Total Class Fees", value: "...", icon: "💰", trend: "..." },
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const headers = { Authorization: `Bearer ${token}` };
+
+        // 1. Fetch Students Count
+        const studentsResp = await fetch("http://localhost:8080/api/users", { headers });
+        const studentsData = await studentsResp.json();
+        const studentCount = studentsData.length;
+
+        // 2. Fetch Pending Assignments
+        // First get all assignments
+        const assignmentsResp = await fetch("http://localhost:8080/api/assignments", { headers });
+        const assignmentsData = await assignmentsResp.json();
+        
+        let pendingCount = 0;
+        // For each assignment, fetch its submissions and count unmarked ones
+        // This is slightly inefficient but works without backend changes
+        await Promise.all(assignmentsData.map(async (assignment: any) => {
+          const subResp = await fetch(`http://localhost:8080/api/assignments/${assignment.id}/submissions`, { headers });
+          if (subResp.ok) {
+            const submissions = await subResp.json();
+            pendingCount += submissions.filter((s: any) => !s.isMarked).length;
+          }
+        }));
+
+        // 3. Fetch Attendance Rate (Today)
+        const today = new Date().toISOString().split('T')[0];
+        const attendanceResp = await fetch(`http://localhost:8080/api/attendance?date=${today}`, { headers });
+        const attendanceData = await attendanceResp.json();
+        
+        let attendanceRate = "0%";
+        if (attendanceData.length > 0) {
+          const presentCount = attendanceData.filter((a: any) => a.status === "PRESENT").length;
+          const rate = Math.round((presentCount / attendanceData.length) * 100);
+          attendanceRate = `${rate}%`;
+        }
+
+        // 4. Fetch Total Class Fees (Paid sum)
+        const feesResp = await fetch("http://localhost:8080/api/fees?status=PAID", { headers });
+        const feesData = await feesResp.json();
+        const totalFees = feesData.reduce((sum: number, fee: any) => sum + (fee.amount || 0), 0);
+
+        setStats([
+          { label: "My Students", value: studentCount.toString(), icon: "🎓", trend: "Total" },
+          { label: "Pending Assignments", value: pendingCount.toString(), icon: "📝", trend: "To Mark" },
+          { label: "Attendance Rate", value: attendanceRate, icon: "📊", trend: "Today" },
+          { label: "Total Class Fees", value: `Rs. ${totalFees.toLocaleString()}`, icon: "💰", trend: "Paid" },
+        ]);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   return (
     <DashboardLayout>
       <div className="w-full space-y-6 animate-fade-in-up">
@@ -23,17 +92,14 @@ const TeacherDashboard: React.FC = () => {
 
         {/* 2. Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { label: "My Students", value: "145", icon: "🎓", trend: "+12%" },
-            { label: "Active Classes", value: "4", icon: "🏫", trend: "Now" },
-            { label: "Pending Assignments", value: "24", icon: "📝", trend: "High" },
-            { label: "Attendance Rate", value: "92%", icon: "📊", trend: "+2%" },
-          ].map((stat, index) => (
+          {stats.map((stat, index) => (
             <div key={index} className="bg-white p-6 rounded-xl shadow-glass border border-slate-100 hover:scale-[1.02] transition-transform duration-200">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-slate-500 text-sm font-medium">{stat.label}</p>
-                  <h3 className="text-3xl font-bold text-slate-800 mt-2">{stat.value}</h3>
+                  <h3 className="text-3xl font-bold text-slate-800 mt-2">
+                    {loading ? <span className="animate-pulse">...</span> : stat.value}
+                  </h3>
                 </div>
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl">
                   {stat.icon}
@@ -43,7 +109,7 @@ const TeacherDashboard: React.FC = () => {
                 <span className="text-emerald-600 text-sm font-semibold bg-emerald-50 px-2 py-0.5 rounded-full">
                   {stat.trend}
                 </span>
-                <span className="text-slate-400 text-sm">vs last week</span>
+                <span className="text-slate-400 text-sm">{stat.label === "Total Class Fees" ? "received" : "overview"}</span>
               </div>
             </div>
           ))}
@@ -51,10 +117,10 @@ const TeacherDashboard: React.FC = () => {
 
         {/* 3. Recent Activity / Schedule */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
-          {/* Upcoming Classes Mock */}
+          {/* ... remains unchanged but showing context ... */}
           <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow-glass border border-slate-100">
             <h3 className="text-lg font-bold text-slate-800 mb-4">Upcoming Classes</h3>
+            {/* Mock content remains for now as requested only stats update */}
             <div className="space-y-3">
                {[
                  { subject: "Mathematics - Grade 10", time: "10:00 AM - 11:30 AM", room: "Room A1" },
@@ -75,6 +141,7 @@ const TeacherDashboard: React.FC = () => {
                ))}
             </div>
           </div>
+          {/* ... */}
 
           {/* Quick Actions / Notifications */}
           <div className="bg-white p-6 rounded-xl shadow-glass border border-slate-100">

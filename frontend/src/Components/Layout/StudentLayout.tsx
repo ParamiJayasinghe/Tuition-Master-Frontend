@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import NotificationBell from "../Common/NotificationBell";
 
 const StudentLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [learningOpen, setLearningOpen] = useState(false);
@@ -96,10 +97,7 @@ const StudentLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <h1 className="text-xl font-semibold text-slate-800">Student Dashboard</h1>
           
           <div className="flex items-center gap-4">
-             <button className="p-2 text-slate-400 hover:text-primary transition-colors relative">
-                <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full"></span>
-                🔔
-             </button>
+             <NotificationBell />
             <div className="flex items-center gap-3 pl-4 border-l border-slate-200 cursor-pointer group">
               <div className="text-right hidden md:block">
                 <p className="text-sm font-medium text-slate-700 group-hover:text-primary transition-colors">Student User</p>
